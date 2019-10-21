@@ -1,0 +1,40 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+    defaultConfig {
+        applicationId "com.swolf.ly.frametemplateapp"
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation rootProject.ext.dependencies.kotlin_stdlib_jdk7_1331
+    implementation rootProject.ext.dependencies.appcompat_110
+    implementation rootProject.ext.dependencies.core_ktx_110
+    implementation rootProject.ext.dependencies.constraintlayout_113
+    implementation project(path: ':lib_common')
+
+
+    if (rootProject.ext.isApplication) {
+
+    } else {
+//        implementation project(":modulea")
+//        implementation project(":moduleb")
+    }
+}
