@@ -1,5 +1,5 @@
 ext {
-    isApplication = true
+    isApplication = false
     android = [
             compileSdkVersion: 29,
             applicationId    : "com.swolf.ly.frametemplateapp",
