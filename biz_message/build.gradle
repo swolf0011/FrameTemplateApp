@@ -1,4 +1,4 @@
-if (isApplication.toBoolean()) {
+if (rootProject.ext.isApplication) {
     apply plugin: 'com.android.application'
 } else {
     apply plugin: 'com.android.library'
@@ -9,7 +9,7 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
-        if (isApplication.toBoolean()) {
+        if (rootProject.ext.isApplication) {
             applicationId "com.swolf.ly.message"
         }
         minSdkVersion 21
@@ -17,10 +17,21 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            if (rootProject.ext.isApplication) {
+                manifest.srcFile 'src/main/AndroidManifest_app.xml'
+            } else {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+            }
         }
     }
 }
