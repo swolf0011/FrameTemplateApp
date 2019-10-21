@@ -1,1 +1,1 @@
-include ':app',   ':biz_login', ':biz_main', ':biz_message', ':lib_common'
+include ':app',   ':biz_login', ':biz_main', ':biz_message', ':lib_common', ':fun_pay', ':fun_share'

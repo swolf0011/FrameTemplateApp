@@ -1,9 +1,6 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
-
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -21,13 +18,8 @@ android {
         }
     }
 }
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation rootProject.ext.dependencies.kotlin_stdlib_jdk7_1331
-    implementation rootProject.ext.dependencies.appcompat_110
-    implementation rootProject.ext.dependencies.core_ktx_110
-    implementation rootProject.ext.dependencies.constraintlayout_113
-
+    implementation project(path: ':lib_common')
 
 }

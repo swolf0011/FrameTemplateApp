@@ -1,17 +1,8 @@
-if (isApplication.toBoolean()) {
-    apply plugin: 'com.android.application'
-} else {
-    apply plugin: 'com.android.library'
-}
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.android.library'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
-        if (isApplication.toBoolean()) {
-            applicationId "com.swolf.ly.login"
-        }
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
