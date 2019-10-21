@@ -1,5 +1,8 @@
-apply plugin: 'com.android.library'
-
+if (isApplication.toBoolean()) {
+    apply plugin: 'com.android.application'
+} else {
+    apply plugin: 'com.android.library'
+}
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
@@ -7,9 +10,10 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
-
-
     defaultConfig {
+        if (isApplication.toBoolean()) {
+            applicationId "com.swolf.ly.message"
+        }
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
@@ -37,7 +41,6 @@ dependencies {
     api "androidx.appcompat:appcompat:1.1.0"
     api "androidx.core:core-ktx:1.1.0"
     api "androidx.constraintlayout:constraintlayout:1.1.3"
-    implementation project(path: ':lib_common')
 
 
 }

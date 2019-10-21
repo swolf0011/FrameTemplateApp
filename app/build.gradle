@@ -28,13 +28,6 @@ dependencies {
     implementation rootProject.ext.dependencies.appcompat_110
     implementation rootProject.ext.dependencies.core_ktx_110
     implementation rootProject.ext.dependencies.constraintlayout_113
-    implementation project(path: ':lib_common')
 
 
-    if (rootProject.ext.isApplication) {
-
-    } else {
-//        implementation project(":modulea")
-//        implementation project(":moduleb")
-    }
 }
