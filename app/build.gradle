@@ -31,17 +31,11 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     implementation project(path: ':lib_common')
 
-
-    implementation  'com.alibaba:arouter-api:1.5.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-
-
     //阿里ARouter框架
-    implementation 'com.alibaba:arouter-api:1.4.1'
     kapt 'com.alibaba:arouter-compiler:1.2.2'
-    //app Module中在此处添加若干需要使用到ARouter的Module依赖，但这些Module间不用相互依赖，即可通过ARouter相互通信
-//    implementation project(':baselibrary')
+
 
 }
