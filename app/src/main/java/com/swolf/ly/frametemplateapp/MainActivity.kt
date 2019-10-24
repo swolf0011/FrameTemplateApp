@@ -9,15 +9,13 @@ import com.alibaba.android.arouter.launcher.ARouter
 import com.swolf.ly.common.ARouterAddress
 import com.swolf.ly.common.ARouterInjectable
 
-@Route(path= ARouterAddress.MainActivity,group="frametemplateapp")
+@Route(path= ARouterAddress.MainActivity)
 class MainActivity : AppCompatActivity(), ARouterInjectable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        ARouter.getInstance().inject(this)
         setContentView(R.layout.activity_main)
-
-//        ARouter.getInstance().inject(this)
+        ARouter.getInstance().inject(this)
         println("0000000111")
         var tvLogin = findViewById(R.id.tvLogin) as TextView
         tvLogin.setOnClickListener(View.OnClickListener { v->

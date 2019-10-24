@@ -16,6 +16,11 @@ android {
         versionCode 1
         versionName "1.0"
 
+        kapt {
+            arguments {
+                arg("AROUTER_MODULE_NAME", project.getName())
+            }
+        }
     }
 
     buildTypes {
@@ -27,13 +32,7 @@ android {
 
 }
 
-kapt {
-    generateStubs = true
-    arguments {
-//        arg("AROUTER_MODULE_NAME", project.getName())
-        arg("moduleName",project.getName())
-    }
-}
+
 repositories {
     flatDir {
         dirs 'libs'

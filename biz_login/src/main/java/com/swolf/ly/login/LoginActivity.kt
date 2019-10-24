@@ -10,13 +10,13 @@ import com.swolf.ly.common.ARouterAddress
 import com.swolf.ly.common.ARouterInjectable
 
 
-@Route(path= ARouterAddress.LoginActivity,group="login")
+@Route(path= ARouterAddress.LoginActivity)
 class LoginActivity : AppCompatActivity(), ARouterInjectable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        ARouter.getInstance().inject(this)
         setContentView(R.layout.activity_login)
+        ARouter.getInstance().inject(this)
         println("0000000111")
         var tvLogin = findViewById(R.id.tvLogin) as TextView
         tvLogin.setOnClickListener(View.OnClickListener { v->
