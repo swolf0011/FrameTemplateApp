@@ -8,10 +8,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.swolf.ly.common.ARouterAddress
+import com.swolf.ly.common.ARouterInjectable
 
 import kotlinx.android.synthetic.main.activity_register.*
 @Route(path= ARouterAddress.Login_RegisterActivity)
-class RegisterActivity : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity(), ARouterInjectable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

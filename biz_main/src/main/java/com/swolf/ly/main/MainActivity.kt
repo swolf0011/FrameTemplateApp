@@ -7,10 +7,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.swolf.ly.common.ARouterAddress
+import com.swolf.ly.common.ARouterInjectable
 
-import kotlinx.android.synthetic.main.activity_main.*
 @Route(path= ARouterAddress.Main_MainActivity)
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ARouterInjectable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
