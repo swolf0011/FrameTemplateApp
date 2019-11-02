@@ -14,7 +14,12 @@ android {
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
-
+        kapt {
+            arguments {
+                arg("AROUTER_MODULE_NAME", "App")
+//                arg("AROUTER_MODULE_NAME", project.getName())
+            }
+        }
     }
     buildTypes {
         release {
@@ -35,5 +40,5 @@ dependencies {
     implementation project(path: ':biz_main')
     implementation project(path: ':biz_message')
 
-
+    kapt 'com.alibaba:arouter-compiler:1.2.2'
 }
