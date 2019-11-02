@@ -9,22 +9,27 @@ import com.alibaba.android.arouter.launcher.ARouter
 import com.swolf.ly.common.ARouterAddress
 import com.swolf.ly.common.ARouterInjectable
 
-@Route(path= ARouterAddress.MainActivity)
 class MainActivity : AppCompatActivity(), ARouterInjectable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        ARouter.getInstance().inject(this)
-        println("0000000111")
-        var tvLogin = findViewById(R.id.tvLogin) as TextView
-        tvLogin.setOnClickListener(View.OnClickListener { v->
-            toLogin()
-        } )
     }
 
-    fun toLogin(){
-        println("0000000111333")
-        ARouter.getInstance().build(ARouterAddress.LoginActivity).navigation()
+    fun onClickLogin(v:View){
+        ARouter.getInstance().build(ARouterAddress.Login_LoginActivity).navigation()
     }
+    fun onClickMain(v:View){
+        ARouter.getInstance().build(ARouterAddress.Main_MainActivity).navigation()
+    }
+    fun onClickRegister(v:View){
+        ARouter.getInstance().build(ARouterAddress.Login_RegisterActivity).navigation()
+    }
+    fun onClickHome(v:View){
+        ARouter.getInstance().build(ARouterAddress.Main_HomeActivity).navigation()
+    }
+    fun onClickMessage(v:View){
+        ARouter.getInstance().build(ARouterAddress.Message_MessageActivity).navigation()
+    }
+
 }

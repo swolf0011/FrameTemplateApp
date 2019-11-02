@@ -8,13 +8,13 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.swolf.ly.common.ARouterAddress
 
-import kotlinx.android.synthetic.main.activity_main.*
-@Route(path= ARouterAddress.Main_MainActivity)
-class MainActivity : AppCompatActivity() {
+import kotlinx.android.synthetic.main.activity_home.*
+@Route(path= ARouterAddress.Main_HomeActivity)
+class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_home)
 
     }
     fun onClickLogin(v: View){

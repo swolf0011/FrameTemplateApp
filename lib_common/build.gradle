@@ -9,18 +9,14 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
 
-
+    resourcePrefix "common_"
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
 
-        kapt {
-            arguments {
-                arg("AROUTER_MODULE_NAME", project.getName())
-            }
-        }
+
     }
 
     buildTypes {
@@ -74,7 +70,7 @@ dependencies {
 
     // arouter----https://github.com/alibaba/ARouter
     api  'com.alibaba:arouter-api:1.5.0'
-    kapt 'com.alibaba:arouter-compiler:1.2.2'
+
 
     //eventbus:https://github.com/greenrobot/EventBus
     api 'org.greenrobot:eventbus:3.1.1'
