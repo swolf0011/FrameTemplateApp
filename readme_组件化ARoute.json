@@ -1,0 +1,643 @@
+组件化ARoute
+
+一、项目分为三层：{
+	a：项目壳：必须导入全部业务模块与库模块，或导入有4大组件的功能模块。项目壳：App
+	b：业务模块：相互之间不引用，必须引入库模块，可以引用fun模块。业务模块：biz_login、biz_main、biz_message
+	c：功能模块：相互之间不引用，必须引入库模块。功能模块：fun_pay、fun_share
+	d：库模块：lib_common
+}
+
+二、APP的gradle配置{
+	a：项目根目录下创建config.gradle{
+		/************begin***********/
+		ext {
+			android = [
+					compileSdkVersion: 29,
+					buildToolsVersion: "29.0.2",
+					applicationId    : "com.swolf.ly.frametemplateapp",
+					minSdkVersion    : 21,
+					targetSdkVersion : 29,
+					versionCode      : 1,
+					versionName      : "1.0"
+			]
+			dependencies = [
+					arouter_compiler_122   : "com.alibaba:arouter-compiler:1.2.2"
+			]
+		}
+		/************end***********/
+	}
+	b：修改项目根目录build.gradle{
+		/************begin***********/
+		apply from:"config.gradle"
+		buildscript {
+			ext.kotlin_version = '1.3.31'
+			ext.arouter_register_version = '1.0.2'
+			repositories {
+				google()
+				jcenter()
+			}
+			dependencies {
+				classpath 'com.android.tools.build:gradle:3.4.1'
+				classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+				classpath "com.alibaba:arouter-register:$arouter_register_version"//可选
+			}
+		}
+		allprojects {
+			repositories {
+				google()
+				jcenter()
+			}
+		}
+		task clean(type: Delete) {
+			delete rootProject.buildDir
+		}
+		/************end***********/
+	}
+}
+
+三、lib_common模块{
+	a：修改build.gradle，使用api可以提供给引用的模块使用{
+		/************begin***********/
+		apply plugin: 'com.android.library'
+		apply plugin: 'kotlin-android'
+		apply plugin: 'kotlin-android-extensions'
+		apply plugin: 'kotlin-kapt'
+		android {
+			compileSdkVersion rootProject.ext.android.compileSdkVersion
+			buildToolsVersion rootProject.ext.android.buildToolsVersion
+			resourcePrefix "common_"
+			defaultConfig {
+				minSdkVersion rootProject.ext.android.minSdkVersion
+				targetSdkVersion rootProject.ext.android.targetSdkVersion
+				versionCode rootProject.ext.android.versionCode
+				versionName rootProject.ext.android.versionName
+				kapt {
+					arguments {
+						arg("AROUTER_MODULE_NAME", "Common")
+					}
+				}
+			}
+			buildTypes {
+				release {
+					minifyEnabled false
+					proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+				}
+			}
+		}
+		repositories {
+			flatDir {
+				dirs 'libs'
+			}
+		}
+		dependencies {
+			implementation fileTree(dir: 'libs', include: ['*.jar'])
+			api "androidx.appcompat:appcompat:1.1.0"
+			api "androidx.constraintlayout:constraintlayout:1.1.3"
+			api 'com.google.android.material:material:1.0.0'
+			
+			// kotlin
+			api "androidx.core:core-ktx:1.1.0"
+			api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+			// gson
+			api 'com.google.code.gson:gson:2.8.5'
+
+			//room
+			api 'android.arch.persistence.room:runtime:1.1.1'
+			api 'android.arch.persistence.room:rxjava2:1.1.1'
+			api 'android.arch.persistence.room:guava:1.1.1'
+			kapt 'android.arch.persistence.room:compiler:1.1.1'
+
+			// Retrofit
+			api 'com.squareup.retrofit2:retrofit:2.3.0'
+			api 'com.squareup.retrofit2:converter-gson:2.3.0'
+			api 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+			api 'com.squareup.retrofit2:converter-scalars:2.3.0'
+
+			// OkHttp3:https://square.github.io/okhttp/https/
+			api 'com.squareup.okhttp3:okhttp:4.0.1'
+
+			// RxJava3:https://github.com/ReactiveX/RxJava
+			api 'io.reactivex.rxjava3:rxjava:3.0.0-RC4'
+
+			// RxAndroid:https://github.com/ReactiveX/RxAndroid
+			api 'io.reactivex.rxjava2:rxandroid:2.1.1'
+
+			//eventbus:https://github.com/greenrobot/EventBus
+			api 'org.greenrobot:eventbus:3.1.1'
+
+			// arouter----https://github.com/alibaba/ARouter
+			api  'com.alibaba:arouter-api:1.5.0'
+			kapt 'com.alibaba:arouter-compiler:1.2.2'
+		}
+		/************end***********/
+	}
+	b：创建类{
+		/************begin***********/
+		object ARouterAddress {
+			const val App_LauncherActivity = "/App/LauncherActivity"
+			const val Login_LoginActivity = "/Login/LoginActivity"
+			const val Login_RegisterActivity = "/Login/RegisterActivity"
+			const val Main_MainActivity = "/Main/MainActivity"
+			const val Main_HomeActivity = "/Main/HomeActivity"
+			const val Message_MessageActivity = "/Message/MessageActivity"
+		}
+		interface ARouterInjectable {
+		}
+		object ARouterUtil {
+			fun initARouter(app: Application){
+				///初始化路由
+				if (BuildConfig.DEBUG) {
+					ARouter.openLog()
+					ARouter.openDebug()
+				}
+				ARouter.init(app)
+			}
+		}
+		/************end***********/
+	}
+}
+
+四、fun_share模块{
+	a：修改build.gradle{
+		/************begin***********/
+		apply plugin: 'com.android.library'
+		apply plugin: 'kotlin-android'
+		apply plugin: 'kotlin-android-extensions'
+		apply plugin: 'kotlin-kapt'
+		android {
+			compileSdkVersion rootProject.ext.android.compileSdkVersion
+			buildToolsVersion rootProject.ext.android.buildToolsVersion
+			resourcePrefix "share_"
+			defaultConfig {
+				minSdkVersion rootProject.ext.android.minSdkVersion
+				targetSdkVersion rootProject.ext.android.targetSdkVersion
+				versionCode rootProject.ext.android.versionCode
+				versionName rootProject.ext.android.versionName
+				kapt {
+					arguments {
+						arg("AROUTER_MODULE_NAME", "Sharo")
+		//                arg("AROUTER_MODULE_NAME", project.getName())
+					}
+				}
+			}
+			buildTypes {
+				release {
+					minifyEnabled false
+					proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+				}
+			}
+		}
+		dependencies {
+			implementation fileTree(dir: 'libs', include: ['*.jar'])
+			implementation project(path: ':lib_common')
+			kapt 'com.alibaba:arouter-compiler:1.2.2'
+		}
+		/************end***********/
+	}
+	b：创建类{
+	}
+}
+
+五、fun_pay模块{
+	a：修改build.gradle{
+		/************begin***********/
+		apply plugin: 'com.android.library'
+		apply plugin: 'kotlin-android'
+		apply plugin: 'kotlin-android-extensions'
+		apply plugin: 'kotlin-kapt'
+		android {
+			compileSdkVersion rootProject.ext.android.compileSdkVersion
+			buildToolsVersion rootProject.ext.android.buildToolsVersion
+			resourcePrefix "pay_"
+			defaultConfig {
+				minSdkVersion rootProject.ext.android.minSdkVersion
+				targetSdkVersion rootProject.ext.android.targetSdkVersion
+				versionCode rootProject.ext.android.versionCode
+				versionName rootProject.ext.android.versionName
+				kapt {
+					arguments {
+						arg("AROUTER_MODULE_NAME", "Pay")
+		//                arg("AROUTER_MODULE_NAME", project.getName())
+					}
+				}
+			}
+			buildTypes {
+				release {
+					minifyEnabled false
+					proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+				}
+			}
+		}
+		dependencies {
+			implementation fileTree(dir: 'libs', include: ['*.jar'])
+			implementation project(path: ':lib_common')
+			kapt 'com.alibaba:arouter-compiler:1.2.2'
+		}
+		/************end***********/
+	}
+	b：创建类{
+	}
+}
+
+六、biz_login模块{
+	a：修改build.gradle{
+		/************begin***********/
+		apply plugin: 'com.android.library'
+		apply plugin: 'kotlin-android'
+		apply plugin: 'kotlin-android-extensions'
+		apply plugin: 'kotlin-kapt'
+		android {
+			compileSdkVersion rootProject.ext.android.compileSdkVersion
+			buildToolsVersion rootProject.ext.android.buildToolsVersion
+			resourcePrefix "login_"
+			defaultConfig {
+				if (rootProject.ext.isApplication) {
+					applicationId "com.swolf.ly.login"
+				}
+				minSdkVersion rootProject.ext.android.minSdkVersion
+				targetSdkVersion rootProject.ext.android.targetSdkVersion
+				versionCode rootProject.ext.android.versionCode
+				versionName rootProject.ext.android.versionName
+				kapt {
+					arguments {
+						arg("AROUTER_MODULE_NAME", "Login")
+		//                arg("AROUTER_MODULE_NAME", project.getName())
+					}
+				}
+			}
+			buildTypes {
+				release {
+					minifyEnabled false
+					proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+				}
+			}
+			sourceSets {
+				main {
+					if (rootProject.ext.isApplication) {
+						manifest.srcFile 'src/main/AndroidManifest_app.xml'
+					} else {
+						manifest.srcFile 'src/main/AndroidManifest.xml'
+					}
+				}
+			}
+		}
+		dependencies {
+			implementation fileTree(dir: 'libs', include: ['*.jar'])
+			implementation project(path: ':lib_common')
+			kapt 'com.alibaba:arouter-compiler:1.2.2'
+		}
+		/************end***********/
+	}
+	b：创建类{
+		/************begin***********/
+		@Route(path= ARouterAddress.Login_LoginActivity)
+		class LoginActivity : AppCompatActivity(), ARouterInjectable {
+			override fun onCreate(savedInstanceState: Bundle?) {
+				super.onCreate(savedInstanceState)
+				setContentView(R.layout.activity_login)
+			}
+			fun onClickLogin(v:View){
+				ARouter.getInstance().build(ARouterAddress.Login_LoginActivity).navigation()
+			}
+			fun onClickMain(v:View){
+				ARouter.getInstance().build(ARouterAddress.Main_MainActivity).navigation()
+			}
+			fun onClickRegister(v:View){
+				ARouter.getInstance().build(ARouterAddress.Login_RegisterActivity).navigation()
+			}
+			fun onClickHome(v:View){
+				ARouter.getInstance().build(ARouterAddress.Main_HomeActivity).navigation()
+			}
+			fun onClickMessage(v:View){
+				ARouter.getInstance().build(ARouterAddress.Message_MessageActivity).navigation()
+			}
+		}
+		@Route(path= ARouterAddress.Login_RegisterActivity)
+		class RegisterActivity : AppCompatActivity(), ARouterInjectable {
+			override fun onCreate(savedInstanceState: Bundle?) {
+				super.onCreate(savedInstanceState)
+				setContentView(R.layout.activity_register)
+			}
+			fun onClickLogin(v: View){
+				ARouter.getInstance().build(ARouterAddress.Login_LoginActivity).navigation()
+			}
+			fun onClickMain(v: View){
+				ARouter.getInstance().build(ARouterAddress.Main_MainActivity).navigation()
+			}
+			fun onClickRegister(v: View){
+				ARouter.getInstance().build(ARouterAddress.Login_RegisterActivity).navigation()
+			}
+			fun onClickHome(v: View){
+				ARouter.getInstance().build(ARouterAddress.Main_HomeActivity).navigation()
+			}
+			fun onClickMessage(v: View){
+				ARouter.getInstance().build(ARouterAddress.Message_MessageActivity).navigation()
+			}
+		}
+		/************end***********/
+	}
+}
+
+七、biz_main模块{
+	a：修改build.gradle{
+		/************begin***********/
+		apply plugin: 'com.android.library'
+		apply plugin: 'kotlin-android'
+		apply plugin: 'kotlin-android-extensions'
+		apply plugin: 'kotlin-kapt'
+		android {
+			compileSdkVersion rootProject.ext.android.compileSdkVersion
+			buildToolsVersion rootProject.ext.android.buildToolsVersion
+			resourcePrefix "main_"
+			defaultConfig {
+				minSdkVersion rootProject.ext.android.minSdkVersion
+				targetSdkVersion rootProject.ext.android.targetSdkVersion
+				versionCode rootProject.ext.android.versionCode
+				versionName rootProject.ext.android.versionName
+				kapt {
+					arguments {
+						arg("AROUTER_MODULE_NAME", "Main")
+		//                arg("AROUTER_MODULE_NAME", project.getName())
+					}
+				}
+			}
+			buildTypes {
+				release {
+					minifyEnabled false
+					proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+				}
+			}
+		}
+		dependencies {
+			implementation fileTree(dir: 'libs', include: ['*.jar'])
+			implementation project(path: ':lib_common')
+			kapt 'com.alibaba:arouter-compiler:1.2.2'
+		}
+		/************end***********/
+	}
+	b：创建类{
+		/************begin***********/
+		@Route(path= ARouterAddress.Main_HomeActivity)
+		class HomeActivity : AppCompatActivity(), ARouterInjectable {
+			override fun onCreate(savedInstanceState: Bundle?) {
+				super.onCreate(savedInstanceState)
+				setContentView(R.layout.activity_home)
+			}
+			fun onClickLogin(v: View){
+				ARouter.getInstance().build(ARouterAddress.Login_LoginActivity).navigation()
+			}
+			fun onClickMain(v: View){
+				ARouter.getInstance().build(ARouterAddress.Main_MainActivity).navigation()
+			}
+			fun onClickRegister(v: View){
+				ARouter.getInstance().build(ARouterAddress.Login_RegisterActivity).navigation()
+			}
+			fun onClickHome(v: View){
+				ARouter.getInstance().build(ARouterAddress.Main_HomeActivity).navigation()
+			}
+			fun onClickMessage(v: View){
+				ARouter.getInstance().build(ARouterAddress.Message_MessageActivity).navigation()
+			}
+		}		
+		@Route(path= ARouterAddress.Main_MainActivity)
+		class MainActivity : AppCompatActivity(), ARouterInjectable {
+
+			override fun onCreate(savedInstanceState: Bundle?) {
+				super.onCreate(savedInstanceState)
+				setContentView(R.layout.activity_main)
+
+			}
+			fun onClickLogin(v: View){
+				ARouter.getInstance().build(ARouterAddress.Login_LoginActivity).navigation()
+			}
+			fun onClickMain(v: View){
+				ARouter.getInstance().build(ARouterAddress.Main_MainActivity).navigation()
+			}
+			fun onClickRegister(v: View){
+				ARouter.getInstance().build(ARouterAddress.Login_RegisterActivity).navigation()
+			}
+			fun onClickHome(v: View){
+				ARouter.getInstance().build(ARouterAddress.Main_HomeActivity).navigation()
+			}
+			fun onClickMessage(v: View){
+				ARouter.getInstance().build(ARouterAddress.Message_MessageActivity).navigation()
+			}
+		}		
+		/************end***********/
+	}
+}
+
+八、biz_message模块{
+	a：修改build.gradle{
+		/************begin***********/
+		apply plugin: 'com.android.library'
+		apply plugin: 'kotlin-android'
+		apply plugin: 'kotlin-android-extensions'
+		apply plugin: 'kotlin-kapt'
+		android {
+			compileSdkVersion rootProject.ext.android.compileSdkVersion
+			buildToolsVersion rootProject.ext.android.buildToolsVersion
+			resourcePrefix "message_"
+			defaultConfig {
+				minSdkVersion rootProject.ext.android.minSdkVersion
+				targetSdkVersion rootProject.ext.android.targetSdkVersion
+				versionCode rootProject.ext.android.versionCode
+				versionName rootProject.ext.android.versionName
+				kapt {
+					arguments {
+						arg("AROUTER_MODULE_NAME", "Message")
+		//                arg("AROUTER_MODULE_NAME", project.getName())
+					}
+				}
+			}
+			buildTypes {
+				release {
+					minifyEnabled false
+					proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+				}
+			}
+		}
+		dependencies {
+			implementation fileTree(dir: 'libs', include: ['*.jar'])
+			implementation project(path: ':lib_common')
+			kapt 'com.alibaba:arouter-compiler:1.2.2'
+		}
+		/************end***********/
+	}
+	b：创建类{
+		/************begin***********/
+		@Route(path= ARouterAddress.Message_MessageActivity)
+		class MessageActivity : AppCompatActivity(), ARouterInjectable {
+			override fun onCreate(savedInstanceState: Bundle?) {
+				super.onCreate(savedInstanceState)
+				setContentView(R.layout.activity_message)
+			}
+			fun onClickLogin(v: View){
+				ARouter.getInstance().build(ARouterAddress.Login_LoginActivity).navigation()
+			}
+			fun onClickMain(v: View){
+				ARouter.getInstance().build(ARouterAddress.Main_MainActivity).navigation()
+			}
+			fun onClickRegister(v: View){
+				ARouter.getInstance().build(ARouterAddress.Login_RegisterActivity).navigation()
+			}
+			fun onClickHome(v: View){
+				ARouter.getInstance().build(ARouterAddress.Main_HomeActivity).navigation()
+			}
+			fun onClickMessage(v: View){
+				ARouter.getInstance().build(ARouterAddress.Message_MessageActivity).navigation()
+			}
+		}
+		/************end***********/
+	}
+}
+
+九、app项目壳{
+	a：修改build.gradle，必须导入全部业务模块与库模块，或导入有4大组件的功能模块。由于壳工程不需要引入ARouter。{
+		/************begin***********/
+		apply plugin: 'com.android.application'
+		apply plugin: 'kotlin-android'
+		apply plugin: 'kotlin-android-extensions'
+		apply plugin: 'kotlin-kapt'
+		android {
+			compileSdkVersion rootProject.ext.android.compileSdkVersion
+			buildToolsVersion rootProject.ext.android.buildToolsVersion
+			resourcePrefix "app_"
+			defaultConfig {
+				applicationId rootProject.ext.android.applicationId
+				minSdkVersion rootProject.ext.android.minSdkVersion
+				targetSdkVersion rootProject.ext.android.targetSdkVersion
+				versionCode rootProject.ext.android.versionCode
+				versionName rootProject.ext.android.versionName
+			}
+			buildTypes {
+				release {
+					minifyEnabled false
+					proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+				}
+			}
+		}
+		dependencies {
+			implementation fileTree(dir: 'libs', include: ['*.jar'])
+			implementation project(path: ':lib_common')
+			implementation project(path: ':fun_share')
+			implementation project(path: ':fun_pay')
+			implementation project(path: ':biz_login')
+			implementation project(path: ':biz_main')
+			implementation project(path: ':biz_message')
+		}
+		/************end***********/
+	}
+	b：创建类{
+		/************begin***********/
+		class LauncherActivity : AppCompatActivity(), ARouterInjectable {
+			override fun onCreate(savedInstanceState: Bundle?) {
+				super.onCreate(savedInstanceState)
+				setContentView(R.layout.activity_launcher)
+			}
+			fun onClickLogin(v:View){
+				ARouter.getInstance().build(ARouterAddress.Login_LoginActivity).navigation()
+			}
+			fun onClickMain(v:View){
+				ARouter.getInstance().build(ARouterAddress.Main_MainActivity).navigation()
+			}
+			fun onClickRegister(v:View){
+				ARouter.getInstance().build(ARouterAddress.Login_RegisterActivity).navigation()
+			}
+			fun onClickHome(v:View){
+				ARouter.getInstance().build(ARouterAddress.Main_HomeActivity).navigation()
+			}
+			fun onClickMessage(v:View){
+				ARouter.getInstance().build(ARouterAddress.Message_MessageActivity).navigation()
+			}
+		}
+		class MyApp:Application() {
+			override fun onCreate() {
+				super.onCreate()
+				ARouterUtil.initARouter(this)
+				init(this)
+			}
+			fun init(app: Application) {
+				app.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
+					override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+						handleActivity(activity)
+					}
+					override fun onActivityStarted(activity: Activity) {
+					}
+					override fun onActivityResumed(activity: Activity) {
+					}
+					override fun onActivityPaused(activity: Activity) {
+					}
+					override fun onActivityStopped(activity: Activity) {
+					}
+					override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle?) {
+					}
+					override fun onActivityDestroyed(activity: Activity) {
+					}
+				})
+			}
+			private fun handleActivity(activity: Activity) {
+				if (activity is ARouterInjectable) {
+					///注入ARouter参数
+					ARouter.getInstance().inject(activity)
+				}
+				if (activity is FragmentActivity) {
+					activity.supportFragmentManager.registerFragmentLifecycleCallbacks(
+						object : FragmentManager.FragmentLifecycleCallbacks() {
+							override fun onFragmentCreated(fm: FragmentManager, f: Fragment, savedInstanceState: Bundle?) {
+								if (f is ARouterInjectable) {
+									///注入ARouter参数
+									ARouter.getInstance().inject(f)
+								}
+							}
+						}, true
+					)
+				}
+			}
+		}
+		/************end***********/
+	}
+	c：AndroidManifest.xml{
+		/************begin***********/
+		<application android:name=".MyApp"
+				android:allowBackup="true"
+				android:icon="@mipmap/ic_launcher"
+				android:label="@string/app_name"
+				android:roundIcon="@mipmap/ic_launcher_round"
+				android:supportsRtl="true"
+				android:theme="@style/AppTheme">
+			<activity android:name=".LauncherActivity">
+				<intent-filter>
+					<action android:name="android.intent.action.MAIN"/>
+
+					<category android:name="android.intent.category.LAUNCHER"/>
+				</intent-filter>
+			</activity>
+		</application>
+		/************end***********/
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
