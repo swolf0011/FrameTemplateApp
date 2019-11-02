@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.jakewharton.butterknife' // 添加
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
     buildToolsVersion rootProject.ext.android.buildToolsVersion
@@ -37,7 +38,7 @@ dependencies {
     api 'com.google.android.material:material:1.0.0'
 // kotlin
     api "androidx.core:core-ktx:1.1.0"
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
 //    api(name: 'messagecentersdk-release', ext: 'aar')
     // gson
@@ -66,6 +67,10 @@ dependencies {
 
     //eventbus:https://github.com/greenrobot/EventBus
     api 'org.greenrobot:eventbus:3.1.1'
+
+    // butterknife----https://github.com/JakeWharton/butterknife
+    api 'com.jakewharton:butterknife:10.2.0'
+    kapt  'com.jakewharton:butterknife-compiler:10.2.0'
 
     // arouter----https://github.com/alibaba/ARouter
     api  'com.alibaba:arouter-api:1.5.0'
