@@ -2,8 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-
-
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
     buildToolsVersion rootProject.ext.android.buildToolsVersion
@@ -28,17 +26,11 @@ android {
         }
     }
 }
-
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     implementation project(path: ':lib_common')
-    implementation project(path: ':fun_share')
-    implementation project(path: ':fun_pay')
     implementation project(path: ':biz_login')
     implementation project(path: ':biz_main')
     implementation project(path: ':biz_message')
-
     kapt 'com.alibaba:arouter-compiler:1.2.2'
 }

@@ -17,7 +17,6 @@ android {
 //                arg("AROUTER_MODULE_NAME", project.getName())
             }
         }
-
     }
     buildTypes {
         release {
@@ -29,4 +28,5 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(path: ':lib_common')
+    kapt 'com.alibaba:arouter-compiler:1.2.2'
 }

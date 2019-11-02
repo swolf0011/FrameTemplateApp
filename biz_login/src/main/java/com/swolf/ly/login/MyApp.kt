@@ -1,4 +1,4 @@
-package com.swolf.ly.frametemplateapp
+package com.swolf.ly.login
 
 import android.app.Activity
 import android.app.Application

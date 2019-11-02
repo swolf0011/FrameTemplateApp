@@ -1,26 +1,16 @@
-if (rootProject.ext.isApplication) {
-    apply plugin: 'com.android.application'
-} else {
-    apply plugin: 'com.android.library'
-}
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-
-
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
     buildToolsVersion rootProject.ext.android.buildToolsVersion
     resourcePrefix "login_"
     defaultConfig {
-        if (rootProject.ext.isApplication) {
-            applicationId "com.swolf.ly.login"
-        }
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
-
         kapt {
             arguments {
                 arg("AROUTER_MODULE_NAME", "Login")
@@ -34,25 +24,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets {
-        main {
-            if (rootProject.ext.isApplication) {
-                manifest.srcFile 'src/main/AndroidManifest_app.xml'
-            } else {
-                manifest.srcFile 'src/main/AndroidManifest.xml'
-            }
-        }
-    }
 }
-
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     implementation project(path: ':lib_common')
-
-//    implementation 'androidx.appcompat:appcompat:1.1.0'
-//    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-//    implementation 'com.google.android.material:material:1.0.0'
     kapt 'com.alibaba:arouter-compiler:1.2.2'
 }

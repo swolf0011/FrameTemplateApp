@@ -1,8 +1,4 @@
-if (rootProject.ext.isApplication) {
-    apply plugin: 'com.android.application'
-} else {
-    apply plugin: 'com.android.library'
-}
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
@@ -11,14 +7,10 @@ android {
     buildToolsVersion rootProject.ext.android.buildToolsVersion
     resourcePrefix "main_"
     defaultConfig {
-        if (rootProject.ext.isApplication) {
-            applicationId "com.swolf.ly.main"
-        }
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
-
         kapt {
             arguments {
                 arg("AROUTER_MODULE_NAME", "Main")
@@ -32,23 +24,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets {
-        main {
-            if (rootProject.ext.isApplication) {
-                manifest.srcFile 'src/main/AndroidManifest_app.xml'
-            } else {
-                manifest.srcFile 'src/main/AndroidManifest.xml'
-            }
-        }
-    }
 }
-
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     implementation project(path: ':lib_common')
-
-
     kapt 'com.alibaba:arouter-compiler:1.2.2'
 }

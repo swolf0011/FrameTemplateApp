@@ -3,7 +3,6 @@ package com.swolf.ly.frametemplateapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.swolf.ly.common.ARouterAddress
