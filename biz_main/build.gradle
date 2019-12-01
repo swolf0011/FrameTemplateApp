@@ -6,6 +6,13 @@ apply plugin: 'com.jakewharton.butterknife' // 添加
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
     buildToolsVersion rootProject.ext.android.buildToolsVersion
+    dexOptions {
+        javaMaxHeapSize "4g"
+        preDexLibraries = false
+        additionalParameters += '--multi-dex'
+        additionalParameters += '--set-max-idx-number=35000'//每个包内方法数上限（根据实际项目配置这个数，来适配4.0-4.4一些低端机型，因为拆分的dex太大，这些低端机型加载不了dex）
+        additionalParameters += '--minimal-main-dex'
+    }
     resourcePrefix "main_"
     defaultConfig {
         minSdkVersion rootProject.ext.android.minSdkVersion
@@ -17,6 +24,11 @@ android {
                 arg("AROUTER_MODULE_NAME", "Main")
 //                arg("AROUTER_MODULE_NAME", project.getName())
             }
+        }
+        multiDexEnabled true
+        ndk {
+            //设置支持的SO库架构,其它可以不用。
+            abiFilters "armeabi-v7a" //,"armeabi", "arm64-v8a", "x86", "x86_64"
         }
     }
     buildTypes {
@@ -30,6 +42,13 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+    dataBinding {
+        enabled = true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 repositories {
     flatDir {
@@ -42,4 +61,7 @@ dependencies {
     kapt rootProject.ext.dependencies.arouter_compiler
 
     implementation project(path: ':lib_common')
+}
+repositories {
+    mavenCentral()
 }
