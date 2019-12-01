@@ -131,10 +131,9 @@ object KPhotoTransformationUtil {
         display.getSize(point)
         val w = point.x
         val h = point.y
-        var bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.RGB_565)
         //2.获取屏幕
         val decorview = activity.window.decorView
-        bitmap = decorview.drawToBitmap()
+        var bitmap = decorview.drawToBitmap()
         return bitmap
     }
 

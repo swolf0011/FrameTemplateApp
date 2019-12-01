@@ -59,14 +59,11 @@ object KSavePhotoUtil {
         val baos = ByteArrayOutputStream()
         bitmap.compress(CompressFormat, 100, baos)
         val b = saveImage2File(baos.toByteArray(), saveFile)
-        if (baos != null) {
-            try {
-                baos.flush()
-                baos.close()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-
+        try {
+            baos.flush()
+            baos.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
         return b
     }

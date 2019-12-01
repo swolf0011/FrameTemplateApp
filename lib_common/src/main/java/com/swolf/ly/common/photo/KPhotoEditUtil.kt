@@ -164,12 +164,9 @@ class KPhotoEditUtil {
      * @param yWatermarkOffset y轴水印图偏移
      * @return
      */
-    fun synthesisBitmap(src: Bitmap?, watermark: Bitmap, xWatermarkOffset: Int, yWatermarkOffset: Int): Bitmap? {
+    fun synthesisBitmap(src: Bitmap, watermark: Bitmap, xWatermarkOffset: Int, yWatermarkOffset: Int): Bitmap? {
         var xWatermarkOffset = xWatermarkOffset
         var yWatermarkOffset = yWatermarkOffset
-        if (src == null) {
-            return null
-        }
         val w = src.width
         val h = src.height
         val ww = watermark.width
@@ -183,7 +180,7 @@ class KPhotoEditUtil {
         }
 
         //create the new blank bitmap
-        val newb = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_4444)//创建一个新的和SRC长度宽度一样的位图
+        val newb = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)//创建一个新的和SRC长度宽度一样的位图
         val cv = Canvas(newb)
         //draw src into
         cv.drawBitmap(src, 0f, 0f, null)//在 0，0坐标开始画入src
