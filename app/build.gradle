@@ -12,25 +12,68 @@ android {
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
-//        kapt {
-//            arguments {
-//                arg("AROUTER_MODULE_NAME", "App")
-////                arg("AROUTER_MODULE_NAME", project.getName())
-//            }
-//        }
+        kapt {
+            arguments {
+                arg("AROUTER_MODULE_NAME", "App")
+//                arg("AROUTER_MODULE_NAME", project.getName())
+            }
+        }
+    }
+    signingConfigs {
+        debug {
+            keyAlias "swolf"
+            keyPassword "123456"
+            storeFile file("../keystore/swolf.jks")
+            storePassword "123456"
+        }
+        release {
+            storeFile file("../keystore/swolf.jks")
+            storePassword "123456"
+            keyAlias "swolf"
+            keyPassword "123456"
+            v2SigningEnabled false
+        }
     }
     buildTypes {
-        release {
+        debug {
+            signingConfig signingConfigs.debug
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            zipAlignEnabled true
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        def date = new Date().format("yyyyMMddHHmmss")
+        applicationVariants.all { variant ->
+            variant.outputs.all {
+                outputFileName = "FrameTemplateApp_v${defaultConfig.versionName}_${date}_${variant.buildType.name}.apk"
+            }
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+}
+repositories {
+    flatDir {
+        dirs 'libs'
     }
 }
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    kapt rootProject.ext.dependencies.arouter_compiler
+
     implementation project(path: ':lib_common')
     implementation project(path: ':biz_login')
     implementation project(path: ':biz_main')
     implementation project(path: ':biz_message')
-//    kapt 'com.alibaba:arouter-compiler:1.2.2'
 }
