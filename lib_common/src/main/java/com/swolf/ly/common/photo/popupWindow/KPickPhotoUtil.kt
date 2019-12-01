@@ -55,7 +55,6 @@ object KPickPhotoUtil {
         cursor.moveToFirst()
         var path = cursor.getString(index)
         cursor.close()
-        cursor = null
         return path
     }
 

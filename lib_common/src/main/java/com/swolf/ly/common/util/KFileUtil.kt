@@ -73,19 +73,13 @@ class KFileUtil private constructor() {
 
 
     fun closeInputStream(input: InputStream): Unit = try {
-        if (input == null) {
-        } else {
-            input.close()
-        }
+        input.close()
     } catch (e: Exception) {
         e.printStackTrace()
     }
 
     fun closeOutputStream(output: OutputStream): Unit = try {
-        if (output == null) {
-        } else {
-            output.close()
-        }
+        output.close()
     } catch (e: Exception) {
         e.printStackTrace()
     }
@@ -136,7 +130,7 @@ class KFileUtil private constructor() {
         if (!file.exists()) {
             file.createNewFile();
         }
-        if (file.exists() && bytes != null && bytes.size > 0) {
+        if (file.exists() && bytes.size > 0) {
             var outputStream = FileOutputStream(file, isSuperaddition)
             outputStream.write(bytes)
             outputStream.flush()
