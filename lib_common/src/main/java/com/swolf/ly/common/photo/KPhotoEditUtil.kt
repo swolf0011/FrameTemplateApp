@@ -164,13 +164,13 @@ class KPhotoEditUtil {
      * @param yWatermarkOffset y轴水印图偏移
      * @return
      */
-    fun synthesisBitmap(src: Bitmap, watermark: Bitmap, xWatermarkOffset: Int, yWatermarkOffset: Int): Bitmap? {
-        var xWatermarkOffset = xWatermarkOffset
-        var yWatermarkOffset = yWatermarkOffset
+    fun synthesisBitmap(src: Bitmap, watermark: Bitmap, xWatermarkOffset0: Int, yWatermarkOffset1: Int): Bitmap {
+        var xWatermarkOffset = xWatermarkOffset0
+        var yWatermarkOffset = yWatermarkOffset1
         val w = src.width
         val h = src.height
-        val ww = watermark.width
-        val wh = watermark.height
+//        val ww = watermark.width
+//        val wh = watermark.height
 
         if (xWatermarkOffset < 0) {
             xWatermarkOffset = 0
@@ -196,13 +196,13 @@ class KPhotoEditUtil {
     /**
      * 图片透明度处理
      *
-     * @param sourceImg 原始图片
-     * @param number    透明度
+     * @param sourceBitmap 原始图片
+     * @param transparence    透明度
      * @return
      */
-    fun setAlpha(sourceImg: Bitmap, number: Int): Bitmap {
-        var sourceImg = sourceImg
-        var number = number
+    fun setAlpha(sourceBitmap: Bitmap, transparence: Int): Bitmap {
+        var sourceImg = sourceBitmap
+        var number = transparence
         val argb = IntArray(sourceImg.width * sourceImg.height)
         sourceImg.getPixels(argb, 0, sourceImg.width, 0, 0, sourceImg.width, sourceImg.height)// 获得图片的ARGB值
         number = number * 255 / 100

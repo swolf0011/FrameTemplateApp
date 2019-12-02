@@ -38,8 +38,9 @@ class KFileUtil private constructor() {
 
     fun createFile(path: String): Boolean {
         var file = File(path)
-        if (!file.parentFile.exists()) {
-            file.parentFile.mkdirs()
+        var parentFile = file.parentFile
+        if (!parentFile.exists()) {
+            parentFile.mkdirs()
         }
         if (file.exists()) {
             return false
@@ -55,18 +56,16 @@ class KFileUtil private constructor() {
 
     fun readStr(inputStream: InputStream): String {
         var sb = StringBuffer()
-        if (inputStream != null) {
-            var bytes = ByteArray(4 * 1024)
-            var len = -1
-            try {
-                while ({ len = inputStream.read(bytes);len }() != -1) {
-                    sb.append(String(bytes, 0, len))
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            } finally {
-                closeInputStream(inputStream)
+        var bytes = ByteArray(4 * 1024)
+        var len = -1
+        try {
+            while ({ len = inputStream.read(bytes);len }() != -1) {
+                sb.append(String(bytes, 0, len))
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            closeInputStream(inputStream)
         }
         return sb.toString()
     }
@@ -117,11 +116,9 @@ class KFileUtil private constructor() {
     fun readBytes(file: File, start: Long = 0, len: Int = 0): ByteArray {
         var bytes = ByteArray(len)
         var inputStream: RandomAccessFile = RandomAccessFile(file, "rw")
-        if (inputStream != null) {
-            inputStream.seek(start)
-            inputStream.read(bytes)
-            inputStream.close()
-        }
+        inputStream.seek(start)
+        inputStream.read(bytes)
+        inputStream.close()
         return bytes
     }
 
@@ -149,9 +146,8 @@ class KFileUtil private constructor() {
         if (!file.exists()) {
             file.createNewFile();
         }
-        if (file.exists() && inputStream != null) {
+        if (file.exists()) {
             var outputStream = FileOutputStream(file, isSuperaddition)
-
             var bytes = ByteArray(4 * 1024)
             var len = -1
             try {

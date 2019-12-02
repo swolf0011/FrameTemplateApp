@@ -54,17 +54,14 @@ object KPhotoTransformationUtil {
      * bitmap转 byte[]
      */
     fun bitmapToBytes(bitmap: Bitmap): ByteArray {
-        var bytes: ByteArray? = null
-        var outStream: ByteArrayOutputStream? = ByteArrayOutputStream()
+        var outStream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream)
-        bytes = outStream!!.toByteArray()
+        var bytes = outStream.toByteArray()
         try {
             outStream.close()
-            outStream = null
         } catch (e: IOException) {
             e.printStackTrace()
         }
-
         return bytes
     }
 
@@ -123,14 +120,13 @@ object KPhotoTransformationUtil {
      * 当前屏幕的截图
      */
     fun currentWindowToBitmap(activity: Activity): Bitmap {
-        val path = ""
         //1.构建Bitmap
         val windowManager = activity.windowManager
         val display = windowManager.defaultDisplay
         val point = Point()
         display.getSize(point)
-        val w = point.x
-        val h = point.y
+        // val w = point.x
+        // val h = point.y
         //2.获取屏幕
         val decorview = activity.window.decorView
         var bitmap = decorview.drawToBitmap()
