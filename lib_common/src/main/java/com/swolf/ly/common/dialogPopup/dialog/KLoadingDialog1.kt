@@ -46,7 +46,7 @@ object KLoadingDialog1 {
     }
 
     fun dismiss() {
-        if (null != dialog && dialog.isShowing) {
+        if (dialog.isShowing) {
             dialog.dismiss()
         }
     }

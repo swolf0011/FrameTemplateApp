@@ -6,11 +6,11 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class KGsonDateHandler(dateFormatString: String) : JsonDeserializer<Date>, JsonSerializer<Date> {
+class KGsonDateHandler(dateFormatStr: String) : JsonDeserializer<Date>, JsonSerializer<Date> {
     private var dateFormatString = "yyyy-MM-dd HH:mm:ss"
 
     init {
-        this.dateFormatString = dateFormatString
+        this.dateFormatString = dateFormatStr
 
 
     }

@@ -18,6 +18,7 @@ import com.swolf.ly.kotlin.nycommonlib.dialogPopup.popupWindow.KPopupWindowUtil
 import com.swolf.ly.kotlin.nycommonlib.photo.KSavePhotoUtil
 import java.io.File
 
+
 object KPickPhotoPopupWindow {
 
 
@@ -64,7 +65,7 @@ object KPickPhotoPopupWindow {
 
     fun newFileInfo(ext: String?) {
         val cameraDir =
-            File(Environment.getExternalStorageDirectory().toString() + File.separator + "cameraDir" + File.separator)
+            File(Environment.getRootDirectory().toString() + File.separator + "cameraDir" + File.separator)
         /** 使用照相机拍摄照片作为头像时会使用到这个路径  */
         if (!cameraDir.exists()) {
             cameraDir.mkdirs()

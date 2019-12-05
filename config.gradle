@@ -62,8 +62,12 @@ ext {
             base_recycler_view_adapter_helper: "com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.47",
             //logger
             logger                           : "com.orhanobut:logger:2.2.0",
-
-
+            //leakcanary-android
+            leakcanary_android               : "com.squareup.leakcanary:leakcanary-android:2.0",
+//            leakcanary_android_no_op         : "com.squareup.leakcanary:leakcanary-android-no-op:2.0",
+//            leakcanary_support_fragment      : "com.squareup.leakcanary:leakcanary-support-fragment:2.0",
+            //databinding
+            databinding_compiler             : "com.android.databinding:compiler:3.1.4"
     ]
 }
 

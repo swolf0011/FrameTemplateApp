@@ -19,7 +19,7 @@ class KUncaughtExceptionHandler(context: Context) : Thread.UncaughtExceptionHand
 
     override fun uncaughtException(thread: Thread, throwable: Throwable) {
         //可以上传错误日志
-        if (!handleException(throwable) && mHandler != null) {
+        if (!handleException(throwable)) {
             mHandler.uncaughtException(thread, throwable)
         } else {
             //系统退出，kill进程
@@ -29,9 +29,6 @@ class KUncaughtExceptionHandler(context: Context) : Thread.UncaughtExceptionHand
     }
 
     private fun handleException(throwable: Throwable):Boolean {
-        if(throwable==null){
-            return false
-        }
         saveErrorInfo2File(throwable)
         return true
     }

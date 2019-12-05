@@ -81,7 +81,7 @@ class KAlertDialogUtil {
     }
 
     fun dismiss() {
-        if (dialog != null && dialog.isShowing) {
+        if (dialog.isShowing) {
             dialog.dismiss()
         }
     }

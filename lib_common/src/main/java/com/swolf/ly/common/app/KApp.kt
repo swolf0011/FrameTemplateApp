@@ -1,12 +1,11 @@
 package com.swolf.ly.kotlin.nycommonlib.app
 
-import android.R
 import android.app.Application
 import androidx.multidex.MultiDex
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
-import com.squareup.leakcanary.LeakCanary
+//import com.squareup.leakcanary.LeakCanary
 
 class KApp:Application() {
 
@@ -14,15 +13,15 @@ class KApp:Application() {
         super.onCreate()
         MultiDex.install(this)
         initLogger()
-        initLeakCanary()
+//        initLeakCanary()
     }
 
-    fun initLeakCanary(){
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return;
-        }
-        LeakCanary.install(this);
-    }
+//    fun initLeakCanary(){
+//        if (LeakCanary.isInAnalyzerProcess(this)) {
+//            return;
+//        }
+//        LeakCanary.install(this);
+//    }
     fun initLogger(){
         Logger.addLogAdapter(
             AndroidLogAdapter(
