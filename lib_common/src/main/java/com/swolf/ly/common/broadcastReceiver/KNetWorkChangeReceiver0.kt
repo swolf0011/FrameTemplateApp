@@ -21,10 +21,10 @@ import android.os.Build
  */
 class KNetWorkChangeReceiver0 : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        networkConnected(context, intent)
+        networkConnected(context)
     }
 
-    fun networkConnected(context: Context, intent: Intent) {
+    fun networkConnected(context: Context) {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         connectivityManager.requestNetwork(NetworkRequest.Builder().build(),KNetworkCallback())
     }

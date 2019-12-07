@@ -75,7 +75,7 @@ object KPhotoCompressUtil {
      */
     fun imageFilePathToBytes(filePath: String, cf: Bitmap.CompressFormat, n_w: Int, n_h: Int): ByteArray {
         var bs: ByteArray
-        val bitmap = imageFilePathToBitmap(filePath, cf, n_w, n_h)
+        val bitmap = imageFilePathToBitmap(filePath, n_w, n_h)
         val quality = 100 // 100:not compress
         val baos = ByteArrayOutputStream()
         bitmap.compress(cf, quality, baos)
@@ -91,7 +91,7 @@ object KPhotoCompressUtil {
 
     }
 
-    fun imageFilePathToBitmap(filePath: String, cf: Bitmap.CompressFormat, n_w: Int, n_h: Int): Bitmap {
+    fun imageFilePathToBitmap(filePath: String, n_w: Int, n_h: Int): Bitmap {
         val newOpts = BitmapFactory.Options()
         val w = newOpts.outWidth
         val h = newOpts.outHeight

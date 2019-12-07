@@ -2,6 +2,7 @@ package com.swolf.ly.kotlin.nycommonlib.factory.room.impl
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.swolf.ly.common.entity.Message
 
 
 @Dao

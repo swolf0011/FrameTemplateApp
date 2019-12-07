@@ -1,7 +1,7 @@
 package com.swolf.ly.kotlin.nycommonlib.factory.gson
 
 import com.google.gson.reflect.TypeToken
-import com.swolf.ly.kotlin.nycommonlib.factory.gsona.KArea
+import com.swolf.ly.common.entity.KArea
 
 object KGsonAddrParser {
     private var areaMap: Map<String, Map<String, Array<String>>>? = null

@@ -1,4 +1,4 @@
-package com.swolf.ly.kotlin.nycommonlib.factory.room.impl
+package com.swolf.ly.common.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

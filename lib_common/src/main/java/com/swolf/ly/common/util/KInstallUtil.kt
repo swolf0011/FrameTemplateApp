@@ -31,14 +31,23 @@ object KInstallUtil {
             val builder = AlertDialog.Builder(activity)
             builder.setTitle("提示")
             builder.setMessage("安装应用需要打开未知来源权限，请去设置中开启应用权限，以允许安装来自此来源的应用")
-            builder.setPositiveButton("去设置") { dialog, which ->
+            builder.setPositiveButton("去设置", { _, _ ->
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     val packageURI = Uri.parse("package:" + activity.packageName)
                     //注意这个是8.0新API
                     val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, packageURI)
                     activity.startActivityForResult(intent, requestPackageInstallsCode)
                 }
-            }
+            })
+
+//            builder.setPositiveButton("去设置") { dialog, which ->
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                    val packageURI = Uri.parse("package:" + activity.packageName)
+//                    //注意这个是8.0新API
+//                    val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, packageURI)
+//                    activity.startActivityForResult(intent, requestPackageInstallsCode)
+//                }
+//            }
             builder.show()
         }
     }
@@ -65,14 +74,15 @@ object KInstallUtil {
      * 申请未知应用安装权限的回调结果
      */
     fun onActivityResult(
-        activity: Activity,
         requestCode: Int,
         resultCode: Int,
-        data: Intent,
         requestPackageInstallsCode: Int,
-        callback: IResultCallback?
+        callback: IResultCallback
     ) {
-        if (requestCode == requestPackageInstallsCode && callback != null) {
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+        if (requestCode == requestPackageInstallsCode) {
             callback.handler()
         }
     }

@@ -29,7 +29,7 @@ object KVerifyUtil {
         if (isEmpty(phoneNumber)) {
             return false
         }
-        if (phoneNumber.length !== 11) {
+        if (phoneNumber.length != 11) {
             return false
         }
         val s = phoneNumber.substring(0, 1)

@@ -27,7 +27,7 @@ class KFileUtil private constructor() {
         var file = File(path)
         if (file.isDirectory) {
             var list = file.listFiles()
-            if (list.size > 0) {
+            if (list!!.size > 0) {
                 for (item in list) {
                     delFile(item.absolutePath)
                 }
@@ -39,7 +39,7 @@ class KFileUtil private constructor() {
     fun createFile(path: String): Boolean {
         var file = File(path)
         var parentFile = file.parentFile
-        if (!parentFile.exists()) {
+        if(parentFile!=null&&!(parentFile.exists())){
             parentFile.mkdirs()
         }
         if (file.exists()) {
@@ -106,10 +106,8 @@ class KFileUtil private constructor() {
         var len = file.length().toInt()
         var bytes = ByteArray(len)
         var inputStream: FileInputStream = FileInputStream(file)
-        if (inputStream != null) {
-            inputStream.read(bytes)
-            closeInputStream(inputStream)
-        }
+        inputStream.read(bytes)
+        closeInputStream(inputStream)
         return bytes
     }
 

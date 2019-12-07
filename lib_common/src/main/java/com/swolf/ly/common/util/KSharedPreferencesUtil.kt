@@ -15,31 +15,24 @@ class KSharedPreferencesUtil {
             sp = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
         }
     }
+
     companion object {
-        private var instance: KSharedPreferencesUtil? = null
-        fun getInstance(context: Context): KSharedPreferencesUtil?{
+        private lateinit var instance: KSharedPreferencesUtil
+        fun getInstance(context: Context): KSharedPreferencesUtil {
             if (instance == null) {
-                synchronized(KSharedPreferencesUtil::class.java) {
-                    if (instance == null) {
-                        instance = KSharedPreferencesUtil(context)
-                    }
-                }
+                instance = KSharedPreferencesUtil(context)
             }
             return instance
         }
     }
 
 
-
     fun remove(vararg ks: String): Boolean {
-        if (ks != null) {
-            val edit = sp!!.edit()
-            for (i in ks.indices) {
-                edit.remove(ks[i])
-            }
-            return edit.commit()
+        val edit = sp!!.edit()
+        for (i in ks.indices) {
+            edit.remove(ks[i])
         }
-        return false
+        return edit.commit()
     }
 
     fun clear(): Boolean {

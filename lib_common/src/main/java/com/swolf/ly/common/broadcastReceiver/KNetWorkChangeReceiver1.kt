@@ -21,10 +21,10 @@ import android.os.Build
  */
 class KNetWorkChangeReceiver1 : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        networkConnected(context, intent)
+        networkConnected(context)
     }
 
-    fun networkConnected(context: Context, intent: Intent) {
+    fun networkConnected(context: Context) {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= 29) {
             val ca = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
@@ -35,8 +35,6 @@ class KNetWorkChangeReceiver1 : BroadcastReceiver() {
             } else {
                 KNetWorkChangeReceiver1Util.isNetworkConnected = false
             }
-            ca.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                    && ca.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
         } else {
             val netInfo = connectivityManager.activeNetworkInfo
             KNetWorkChangeReceiver1Util.isNetworkConnected = netInfo.isConnected

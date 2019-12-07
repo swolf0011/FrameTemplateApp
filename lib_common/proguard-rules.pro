@@ -20,8 +20,60 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+#==========================定制化区域==============================
+#--------------------------实体类----------------------------------
+-keep class com.swolf.ly.common.entity.** { *; }
 
-##############################基本混淆配置##############################
+
+
+
+#--------------------------第三方包--------------------------------
+#eventBus
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+    <init>(java.lang.Throwable);
+}
+
+#glide
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+
+# OkHttp3
+-dontwarn com.squareup.okhttp3.**
+-keep class com.squareup.okhttp3.** { *;}
+-dontwarn okhttp3.**
+-dontwarn okio.**
+
+#Okio
+-dontwarn com.squareup.**
+-dontwarn okio.**
+-keep public class org.codehaus.* { *; }
+-keep public class java.nio.* { *; }
+
+
+#Gson 的序列号和反序列化，其实质上是使用反射获取类解析的
+-keep class com.google.gson.** {*;}
+-keep class sun.misc.Unsafe {*;}
+-keep class com.google.gson.stream.** {*;}
+-keep class com.google.gson.examples.android.model.** {*;}
+-keep class com.google.** {
+    <fields>;
+    <methods>;
+}
+-dontwarn class com.google.gson.**
+
+
+
+
+#==========================基本不用动区域==========================
+#--------------------------基本指令区------------------------------
 # 代码混淆压缩比，在0~7之间，默认为5，一般不做修改
 -optimizationpasses 5
 # 混合时不使用大小写混合，混合后的类名为小写
@@ -44,6 +96,8 @@
 # 指定混淆是采用的算法，后面的参数是一个过滤器
 # 这个过滤器是谷歌推荐的算法，一般不做更改
 -optimizations !code/simplification/cast,!field/*,!class/merging/*
+
+
 # 忽略警告
 -ignorewarnings
 # 设置是否允许改变作用域
@@ -61,31 +115,24 @@
 # 处理support包
 -dontnote android.support.**
 -dontwarn android.support.**
-
-
-
-
-##############################不能使用混淆##############################
-
+#--------------------------默认保留区------------------------------
 # 保留R下面的资源
 -keep class **.R$* {*;}
 
-#1、反射中使用的元素，需要保证类名、方法名、属性名不变，否则反射会有问题。
-#2、最好不让一些bean 类混淆
-#3、四大组件不能混淆，四大组件必须在 manifest 中注册声明，而混淆后类名会发生更改，这样不符合四大组件的注册机制。
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
 -keep public class * extends android.app.Service
 -keep public class * extends android.content.BroadcastReceiver
 -keep public class * extends android.content.ContentProvider
--keep public class * extends android.app.backup.BackupAgent
+-keep public class * extends android.app.backup.BackupAgentHelper
 -keep public class * extends android.preference.Preference
+-keep public class * extends android.view.View
 -keep public class * extends android.support.v4.**
 -keep public class * extends android.support.v7.**
 -keep public class * extends android.support.annotation.**
 -keep public class * extends android.app.Fragment
--keep public class * extends android.view.view
 -keep public class com.android.vending.licensing.ILicensingService
+
 
 # 保留在Activity中的方法参数是view的方法，
 # 这样以来我们在layout中写的onClick就不会被影响
@@ -96,44 +143,26 @@
 -keepclassmembers class * {
     void *(**On*Event);
     void *(**On*Listener);
+    @android.support.annotation.Keep *;
 }
 #保留Keep注解的类名和方法
 -keep,allowobfuscation @interface android.support.annotation.Keep
 -keep @android.support.annotation.Keep class *
--keepclassmembers class * {
-    @android.support.annotation.Keep *;
-}
-#4、注解不能混淆，很多场景下注解被用于在进行时反射一些元素。
+#注解不能混淆，很多场景下注解被用于在进行时反射一些元素。
 -keepattributes *Annotation*
-#5、不能混淆枚举中的value和valueOf方法，因为这两个方法是静态添加到代码中进行，也会被反射使用，所以无法混淆这两种方法。应用使用枚举将添加很多方法，增加了包中的方法数，将增加 dex 的大小。
+#不能混淆枚举中的value和valueOf方法，因为这两个方法是静态添加到代码中进行，也会被反射使用，所以无法混淆这两种方法。应用使用枚举将添加很多方法，增加了包中的方法数，将增加 dex 的大小。
 -keepclassmembers enum * {
     public static **[] values();
     public static ** valueOf(java.lang.String);
 }
-#6、JNI 调用 Java 方法，需要通过类名和方法名构成的地址形成。
-#7、Java 使用 Native 方法，Native 是C/C++编写的，方法是无法一同混淆的。
+#JNI 调用 Java 方法，需要通过类名和方法名构成的地址形成。
+#Java 使用 Native 方法，Native 是C/C++编写的，方法是无法一同混淆的。
 -keepclasseswithmembernames class * {
     native <methods>;
 }
-#8、JS 调用Java 方法
--keepattributes *JavascriptInterface*
-#9、Webview 中 JavaScript 的调用方法不能混淆。注意：Webview 引用的是哪个包名下的。
--keepclassmembers class fqcn.of.javascript.interface.for.webview {
-   public *;
-}
--keepclassmembers class * extends android.webkit.WebViewClient {
-    public void *(android.webkit.WebView, java.lang.String, android.graphics.Bitmap);
-    public boolean *(android.webkit.WebView, java.lang.String);
-}
--keepclassmembers class * extends android.webkit.WebViewClient {
-    public void *(android.webkit.WebView, java.lang.String);
-}
-
-#10、第三方可建议使用其自身混淆规则
-#11、Parcelable 的子类和 Creator 的静态成员变量不混淆，否则会出现 android.os.BadParcelableExeception 异常。
-#Serializable 接口类反序列化：
+#Parcelable 的子类和 Creator 的静态成员变量不混淆，否则会出现 android.os.BadParcelableExeception 异常。
 -keep class * implements android.os.Parcelable {
-    public static final android.os.Parcelable$Creator *;
+  public static final android.os.Parcelable$Creator *;
 }
 -keep class * implements java.io.Serializable {
        static final long serialVersionUID;
@@ -161,22 +190,25 @@
     public static *** e(...);
 }
 
-
-
-#12、Gson 的序列号和反序列化，其实质上是使用反射获取类解析的
--keep class com.google.gson.** {*;}
--keep class sun.misc.Unsafe {*;}
--keep class com.google.gson.stream.** {*;}
--keep class com.google.gson.examples.android.model.** {*;}
--keep class com.google.** {
-    <fields>;
-    <methods>;
+-keepclasseswithmembers class * {
+    public <init>(android.content.Context, android.util.AttributeSet);
+    public <init>(android.content.Context, android.util.AttributeSet, int);
 }
--dontwarn class com.google.gson.**
 
-
-
-
+#--------------------------webview---------------------------------
+#JS 调用Java 方法
+-keepattributes *JavascriptInterface*
+#Webview 中 JavaScript 的调用方法不能混淆。注意：Webview 引用的是哪个包名下的。
+-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+   public *;
+}
+-keepclassmembers class * extends android.webkit.WebViewClient {
+    public void *(android.webkit.WebView, java.lang.String, android.graphics.Bitmap);
+    public boolean *(android.webkit.WebView, java.lang.String);
+}
+-keepclassmembers class * extends android.webkit.WebViewClient {
+    public void *(android.webkit.WebView, jav.lang.String);
+}
 
 
 

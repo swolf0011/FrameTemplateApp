@@ -38,7 +38,7 @@ class KRecyclerViewAdapters<T:KRecyclerViewAdapterEntity> : RecyclerView.Adapter
     /**
      * 建造者，用来完成adapter的数据组合
      */
-    class Builder<B:KRecyclerViewAdapterEntity> {
+    class Builder<B : KRecyclerViewAdapterEntity> {
         private var adapter: KRecyclerViewAdapters<B> = KRecyclerViewAdapters()
         /**
          * 设置数据

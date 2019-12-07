@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.Room
 import com.swolf.ly.kotlin.nycommonlib.factory.room.impl.IMessageDao
-import com.swolf.ly.kotlin.nycommonlib.factory.room.impl.Message
+import com.swolf.ly.common.entity.Message
 
 
 @Database(entities = [Message::class], version = 1, exportSchema = false)

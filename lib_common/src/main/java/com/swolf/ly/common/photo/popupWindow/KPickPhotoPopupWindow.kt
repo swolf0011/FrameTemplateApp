@@ -173,16 +173,7 @@ object KPickPhotoPopupWindow {
     /**
      * outputX * outputY <= 129900
      */
-    fun activityResult(
-        activity: Activity,
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent,
-        imageView: ImageView,
-        outputX: Int,
-        outputY: Int,
-        handler: KIActivityResultHandler?
-    ) {
+    fun activityResult(activity: Activity, requestCode: Int, resultCode: Int, data: Intent, imageView: ImageView, outputX: Int, outputY: Int, handler: KIActivityResultHandler?) {
         if (resultCode == 0) {
             handler?.cancel()
             return
@@ -301,17 +292,12 @@ object KPickPhotoPopupWindow {
         }
     }
 
-    fun result_pickPhotoFromGallery(
-        activity: Activity,
-        resultCode: Int,
-        data: Intent,
-        imageView: ImageView?,
-        outputX: Int,
-        outputY: Int,
-        handler: KIActivityResultHandler?
-    ) {
+    fun result_pickPhotoFromGallery(activity: Activity, resultCode: Int, data: Intent, imageView: ImageView?, outputX: Int, outputY: Int, handler: KIActivityResultHandler?) {
+        if(resultCode != Activity.RESULT_OK){
+            return
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            var imagePath = ""
+            var imagePath:String
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 //Android4.4及以上版本
                 imagePath = KPickPhotoUtil.uriToPath6(activity, data.data!!)!!
@@ -335,7 +321,7 @@ object KPickPhotoPopupWindow {
         } else {
             val uri = data.data
             val path = uri!!.path
-            var imagePath = ""
+            var imagePath:String
             if (path != null && path.lastIndexOf(".jpg") == path.length - 4) {
                 imagePath = path
             } else {
@@ -356,14 +342,10 @@ object KPickPhotoPopupWindow {
         }
     }
 
-    fun result_pickPhotoFromTakePhoto(
-        activity: Activity,
-        resultCode: Int,
-        imageView: ImageView?,
-        outputX: Int,
-        outputY: Int,
-        handler: KIActivityResultHandler?
-    ) {
+    fun result_pickPhotoFromTakePhoto(activity: Activity, resultCode: Int, imageView: ImageView?, outputX: Int, outputY: Int, handler: KIActivityResultHandler?) {
+        if(resultCode != Activity.RESULT_OK){
+            return
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (outputX < 1 || outputY < 1) {
                 if (imageView != null) {
@@ -393,13 +375,10 @@ object KPickPhotoPopupWindow {
         }
     }
 
-    fun result_photoZoomClip(
-        activity: Activity,
-        resultCode: Int,
-        data: Intent,
-        imageView: ImageView?,
-        handler: KIActivityResultHandler?
-    ) {
+    fun result_photoZoomClip(activity: Activity, resultCode: Int, data: Intent, imageView: ImageView?, handler: KIActivityResultHandler?) {
+        if(resultCode != Activity.RESULT_OK){
+            return
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val imagePath = currentFile!!.absolutePath
             val bitmap = BitmapFactory.decodeFile(imagePath)
