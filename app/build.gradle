@@ -56,9 +56,9 @@ android {
         }
         release {
             signingConfig signingConfigs.release
-            minifyEnabled true
+            minifyEnabled true //进行代码混淆处理
             zipAlignEnabled true
-            shrinkResources true
+            shrinkResources true //移除无用资源
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         def date = new Date().format("yyyyMMddHHmmss")

@@ -1,20 +1,18 @@
 package com.swolf.ly.login
 
-import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity;
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.swolf.ly.common.ARouterAddress
 import com.swolf.ly.common.ARouterInjectable
-
+import com.swolf.ly.kotlin.nycommonlib.base.impl.KBaseActivity
 
 @Route(path= ARouterAddress.Login_LoginActivity)
-class LoginActivity : AppCompatActivity(), ARouterInjectable {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+class LoginActivity : KBaseActivity(), ARouterInjectable {
+    override fun setLayout(): Int {
+        return R.layout.activity_login
+    }
+    override fun viewHandler(command: Int, map: Map<String, Any>) {
 
     }
 

@@ -1,22 +1,20 @@
 package com.swolf.ly.main
 
-import android.os.Bundle
 import android.view.View
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity;
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.swolf.ly.common.ARouterAddress
 import com.swolf.ly.common.ARouterInjectable
+import com.swolf.ly.kotlin.nycommonlib.base.impl.KBaseActivity
 
 @Route(path= ARouterAddress.Main_MainActivity)
-class MainActivity : AppCompatActivity(), ARouterInjectable {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
+class MainActivity : KBaseActivity(), ARouterInjectable {
+    override fun setLayout(): Int {
+        return R.layout.activity_main
     }
+    override fun viewHandler(command: Int, map: Map<String, Any>) {
+    }
+
     fun onClickLogin(v: View){
         ARouter.getInstance().build(ARouterAddress.Login_LoginActivity).navigation()
     }
