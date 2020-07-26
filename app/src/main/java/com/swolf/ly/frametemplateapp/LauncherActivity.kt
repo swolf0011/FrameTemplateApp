@@ -27,5 +27,7 @@ class LauncherActivity : KBaseActivity(), ARouterInjectable {
     fun onClickMessage(v:View){
         ARouter.getInstance().build(ARouterAddress.Message_MessageActivity).navigation()
     }
-
+    fun onClickXml(v:View){
+        ARouter.getInstance().build(ARouterAddress.Xml_XmlActivity).navigation()
+    }
 }
